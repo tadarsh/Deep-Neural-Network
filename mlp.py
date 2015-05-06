@@ -13,7 +13,7 @@ import theano.printing
 import theano.tensor.shared_randomstreams
 
 from logistic_sgd import LogisticRegression
-from load_data import load_umontreal_data, load_mnist
+from load_data import load_umontreal_data, load_mnist, load_custom
 
 
 ##################################
@@ -197,7 +197,7 @@ def test_mlp(
     mom_epoch_interval = mom_params["interval"]
     
     
-    datasets = load_mnist(dataset)
+    datasets = load_custom(dataset)
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
     test_set_x, test_set_y = datasets[2]
@@ -385,7 +385,7 @@ if __name__ == '__main__':
     squared_filter_length_limit = 15.0
     n_epochs = 3000
     batch_size = 100
-    layer_sizes = [ 28*28, 1200, 1200, 10 ]
+    layer_sizes = [ 28*28, 512, 512, 10 ]
     
     # dropout rate for each layer
     dropout_rates = [ 0.2, 0.5, 0.5 ]
@@ -404,8 +404,9 @@ if __name__ == '__main__':
                   "end": mom_end,
                   "interval": mom_epoch_interval}
                   
-    dataset = 'data/mnist_batches.npz'
+    #dataset = 'data/mnist_batches.npz'
     #dataset = 'data/mnist.pkl.gz'
+    dataset = 'data/mnist'
 
     if len(sys.argv) < 2:
         print "Usage: {0} [dropout|backprop]".format(sys.argv[0])
