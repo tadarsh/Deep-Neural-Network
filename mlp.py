@@ -5,7 +5,7 @@ import os
 import sys
 import time
 from collections import OrderedDict
-
+import pickle
 import theano
 import theano.tensor as T
 from theano.ifelse import ifelse
@@ -341,6 +341,14 @@ def test_mlp(
     results_file = open(results_file_name, 'wb')
 
     while epoch_counter < n_epochs:
+	#saving the parameters
+        if epoch_counter % 100 == 0:
+		print "Saving params"
+		z = theano.function(inputs=[],outputs=[classifier.params[0],classifier.params[1],classifier.params[2],classifier.params[3],classifier.params[4],classifier.params[5]])
+		#params_save = [classifier.params[0].get_value()]
+		pickle.dump(z(),open('/media/hv-server/Seagate Backup Plus Drive/CS6350/params'+str(epoch_counter)+'.p','w'))
+		print len(classifier.params)
+		
         # Train this epoch
         epoch_counter = epoch_counter + 1
         for minibatch_index in xrange(n_train_batches):
@@ -384,8 +392,8 @@ if __name__ == '__main__':
     learning_rate_decay = 0.998
     squared_filter_length_limit = 15.0
     n_epochs = 3000
-    batch_size = 100
-    layer_sizes = [ 28*28, 512, 512, 10 ]
+    batch_size = 200
+    layer_sizes = [ 4096 * 2, 1024, 1024, 51 ]
     
     # dropout rate for each layer
     dropout_rates = [ 0.2, 0.5, 0.5 ]
@@ -406,7 +414,7 @@ if __name__ == '__main__':
                   
     #dataset = 'data/mnist_batches.npz'
     #dataset = 'data/mnist.pkl.gz'
-    dataset = 'data/mnist'
+    dataset = 'data/hmdb'
 
     if len(sys.argv) < 2:
         print "Usage: {0} [dropout|backprop]".format(sys.argv[0])
@@ -436,6 +444,6 @@ if __name__ == '__main__':
              dropout_rates=dropout_rates,
              dataset=dataset,
              results_file_name=results_file_name,
-             use_bias=False,
+             use_bias=True,
              random_seed=random_seed)
 

@@ -49,9 +49,10 @@ def load_custom(path):
     print '... loading data'
     data_train = np.loadtxt(path + '/data_train.csv', delimiter=',')
     data_valid = np.loadtxt(path + '/data_valid.csv', delimiter=',')
+    print data_train[:,-1].max(),data_train[:,-1].min()	
     
-    train_set_x, train_set_y = _shared_dataset((data_train[:, :-1], data_train[:, -1]))
-    valid_set_x, valid_set_y = _shared_dataset((data_valid[:, :-1], data_valid[:, -1]))
+    train_set_x, train_set_y = _shared_dataset((data_train[:, :-1], data_train[:, -1] - 1))
+    valid_set_x, valid_set_y = _shared_dataset((data_valid[:, :-1], data_valid[:, -1] - 1))
     test_set_x, test_set_y = valid_set_x, valid_set_y
     rval = [(train_set_x, train_set_y), (valid_set_x, valid_set_y),
             (test_set_x, test_set_y)]
